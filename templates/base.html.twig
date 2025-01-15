@@ -15,6 +15,31 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+    <header class="bg-white py-3">
+        <nav class="navbar container">
+            <a class="navbar-brand fw-bold" href="/" style="color: #ffcfa4; font-size: 1.5rem;">
+                <i class="bi bi-briefcase-fill"></i> StagePilot
+            </a>
+            <div class="d-flex">
+                {% block header %}{% endblock %}
+                {% if app.user %}
+                    <a href="{{ path('app_logout') }}" class="nav-item btn btn-danger text-dark">Se déconnecter</a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="nav-item btn" style="background-color: #FFDAB9;">Se connecter</a>
+                {% endif %}
+            </div>
+
+        </nav>
+
+        <div class="border-bottom mb-2 mt-2"></div>
+    </header>
+    {% block body %}{% endblock %}
+    <footer class="py-3 mt-4" style="background-color: #ffcfa4;">
+        <div class="text-center">
+            <i class="bi bi-briefcase-fill"></i>
+            <span class="fw-bold">StagePilot</span> - &copy; 2025 Tous droits réservés.
+        </div>
+    </footer>
     </body>
+
 </html>

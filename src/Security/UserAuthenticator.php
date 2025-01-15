@@ -51,7 +51,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         if (in_array('ROLE_ADMIN', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_admin_menu'));
+            return new RedirectResponse($this->urlGenerator->generate('app_stage_index'));
         }
 
         if (in_array('ROLE_PROFESSEUR', $roles, true)) {

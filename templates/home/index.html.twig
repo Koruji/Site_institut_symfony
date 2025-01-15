@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StagePilot{% endblock %}
+{% block header %}
+        <a href="{{ path('app_register') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">S'inscrire</a>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row g-4">
+            {% for i in 1..8 %}
+                <div class="col-md-3 mb-4">
+                    <div class="card shadow-sm" style="width: 100%;">
+                        <div class="card-body">
+                            <h3 class="card-title">Exemple {{ i }}</h3>
+                            <p class="card-text">Exemple description {{ i }}</p>
+                            <a href="#">Voir plus</a>
+                        </div>
+                        <div class="card-footer text-muted text-center">
+                            Nombre de participants
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+

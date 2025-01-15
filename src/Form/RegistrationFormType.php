@@ -52,7 +52,11 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Mot de passe',
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'Créer un compte',
+                'label' => 'Valider',
+                'attr' => [
+                    'class' => 'btn btn-outline-dark',
+                    'style' => 'margin-top:10px;',
+                ],
         ])
         ;
     }
