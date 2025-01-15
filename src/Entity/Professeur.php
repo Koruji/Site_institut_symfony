@@ -13,7 +13,7 @@ class Professeur
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column(length: 6, unique: true)]
     private ?string $matricule = null;
 
     #[ORM\Column(length: 60)]
@@ -22,7 +22,7 @@ class Professeur
     #[ORM\Column(length: 60)]
     private ?string $prenom = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column(length: 60, unique: true)]
     private ?string $email = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
