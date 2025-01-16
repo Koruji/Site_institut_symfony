@@ -59,7 +59,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         if (in_array('ROLE_STAGIAIRE', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_stagiaire_index'));
+            return new RedirectResponse($this->urlGenerator->generate('app_stagiaire_dashboard'));
         }
 
         //TODO : créer la page de redirection en cas d'erreur lié aux roles

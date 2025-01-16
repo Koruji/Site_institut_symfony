@@ -19,15 +19,7 @@ class StagiaireType extends AbstractType
             ->add('adresse')
             ->add('code_postal')
             ->add('ville')
-            ->add('date_inscription', null, [
-                'widget' => 'single_text',
-            ])
             ->add('email')
-            ->add('stages', EntityType::class, [
-                'class' => Stage::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
         ;
     }
 

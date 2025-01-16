@@ -11,10 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/stagiaire')]
 final class StagiaireController extends AbstractController
 {
-    #[Route(name: 'app_stagiaire_index', methods: ['GET'])]
+    #[Route('/stagiaire', name: 'app_stagiaire_index', methods: ['GET'])]
     public function index(StagiaireRepository $stagiaireRepository): Response
     {
         return $this->render('stagiaire/index.html.twig', [
@@ -22,7 +21,7 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_stagiaire_new', methods: ['GET', 'POST'])]
+    #[Route('/admin/ajout_stagiaire', name: 'app_stagiaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $stagiaire = new Stagiaire();
@@ -42,7 +41,7 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_stagiaire_show', methods: ['GET'])]
+    #[Route('/stagiaire/{id}', name: 'app_stagiaire_show', methods: ['GET'])]
     public function show(Stagiaire $stagiaire): Response
     {
         return $this->render('stagiaire/show.html.twig', [
@@ -50,7 +49,7 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_stagiaire_edit', methods: ['GET', 'POST'])]
+    #[Route('/stagiaire/{id}/modification_compte', name: 'app_stagiaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(StagiaireType::class, $stagiaire);
@@ -59,7 +58,7 @@ final class StagiaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_stagiaire_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('stagiaire/edit.html.twig', [
@@ -68,7 +67,7 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_stagiaire_delete', methods: ['POST'])]
+    #[Route('/stagiaire/{id}', name: 'app_stagiaire_delete', methods: ['POST'])]
     public function delete(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->getPayload()->getString('_token'))) {

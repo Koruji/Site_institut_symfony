@@ -7,22 +7,22 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class ProfesseurDashboardController extends AbstractController
+final class StagiaireDashboardController extends AbstractController
 {
-    #[Route('/dashboard/professeur', name: 'app_professeur_dashboard')]
-    #[IsGranted('ROLE_PROFESSEUR')]
+    #[Route('/dashboard/stagiaire', name: 'app_stagiaire_dashboard')]
+    #[IsGranted('ROLE_STAGIAIRE')]
     public function dashboard(): Response
     {
         //Récupération de l'utilisateur
         $user = $this->getUser();
-        $professeur = $user->getIdProfesseur();
+        $stagiaire = $user->getIdStagiaire();
 
         if (!$user) {
             throw $this->createNotFoundException('User introuvable.');
         }
 
-        return $this->render('professeur_dashboard/dashboard.html.twig', [
-            'professeur' => $professeur,
+        return $this->render('stagiaire_dashboard/dashboard.html.twig', [
+            'stagiaire' => $stagiaire,
         ]);
     }
 }
