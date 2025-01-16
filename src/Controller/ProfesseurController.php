@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class ProfesseurController extends AbstractController
 {
@@ -21,7 +22,7 @@ final class ProfesseurController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/ajout_professeur', name: 'app_professeur_new', methods: ['GET', 'POST'])]
+    #[Route('/professeur/ajout_professeur', name: 'app_professeur_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $professeur = new Professeur();
@@ -67,14 +68,38 @@ final class ProfesseurController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_professeur_delete', methods: ['POST'])]
-    public function delete(Request $request, Professeur $professeur, EntityManagerInterface $entityManager): Response
+//    #[Route('/professeur/{id}', name: 'app_professeur_delete', methods: ['POST'])]
+//    public function delete(Request $request, Professeur $professeur, EntityManagerInterface $entityManager): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$professeur->getId(), $request->getPayload()->getString('_token'))) {
+//            $entityManager->remove($professeur);
+//            $entityManager->flush();
+//        }
+//
+//        return $this->redirectToRoute('app_professeur_index', [], Response::HTTP_SEE_OTHER);
+//    }
+
+    #[Route('professeur/{id}/delete', name: 'app_professeur_delete', methods: ['POST'])]
+    public function delete(Request $request, TokenStorageInterface $tokenStorage, Professeur $professeur, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$professeur->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($professeur);
+        $user = $tokenStorage->getToken()?->getUser();
+
+        if ($this->isCsrfTokenValid('delete'.$professeur->getId(), $request->get('_token'))) {
+            $user->setIdProfesseur(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+
+            if ($professeur) {
+                $entityManager->remove($professeur);
+                $entityManager->flush();
+            }
+
+            $entityManager->remove($user);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_professeur_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

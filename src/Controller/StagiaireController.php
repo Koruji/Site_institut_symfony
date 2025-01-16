@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Stagiaire;
+use App\Entity\User;
 use App\Form\StagiaireType;
 use App\Repository\StagiaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -10,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class StagiaireController extends AbstractController
 {
@@ -21,7 +23,7 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/ajout_stagiaire', name: 'app_stagiaire_new', methods: ['GET', 'POST'])]
+    #[Route('/stagiaire/ajout_stagiaire', name: 'app_stagiaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $stagiaire = new Stagiaire();
@@ -67,14 +69,38 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-    #[Route('/stagiaire/{id}', name: 'app_stagiaire_delete', methods: ['POST'])]
-    public function delete(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
+//    #[Route('/stagiaire/{id}', name: 'app_stagiaire_delete', methods: ['POST'])]
+//    public function delete(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
+//    {
+//        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->getPayload()->getString('_token'))) {
+//            $entityManager->remove($stagiaire);
+//            $entityManager->flush();
+//        }
+//
+//        return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+//    }
+
+    #[Route('stagiaire/{id}/delete', name: 'app_stagiaire_delete', methods: ['POST'])]
+    public function delete(Request $request, TokenStorageInterface $tokenStorage, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($stagiaire);
+        $user = $tokenStorage->getToken()?->getUser();
+
+        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->get('_token'))) {
+            $user->setIdStagiaire(null);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $tokenStorage->setToken(null);
+            $request->getSession()->invalidate();
+
+            if ($stagiaire) {
+                $entityManager->remove($stagiaire);
+                $entityManager->flush();
+            }
+
+            $entityManager->remove($user);
             $entityManager->flush();
         }
-
-        return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }

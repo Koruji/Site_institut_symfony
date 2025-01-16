@@ -40,9 +40,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $prenom = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Professeur $id_professeur = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Stagiaire $id_stagiaire = null;
 
     public function getId(): ?int
@@ -171,7 +173,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->id_stagiaire;
     }
 
-    public function setIdStagiaire(?Stagiaire $id_stagiaire): static
+    public function setIdStagiaire(?Stagiaire $id_stagiaire): self
     {
         $this->id_stagiaire = $id_stagiaire;
 
