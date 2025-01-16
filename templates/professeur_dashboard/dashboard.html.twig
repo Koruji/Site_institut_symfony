@@ -2,7 +2,7 @@
 
 {% block header %}
     <a href="{{ path('app_professeur_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
-    <a href="#" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Mon compte</a>
+    <a href="{{ path('app_professeur_show', { 'id': professeur.id }) }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Mon compte</a>
     <a href="#" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">S'inscrire à un stage</a>
 {% endblock %}
 
