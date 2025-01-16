@@ -20,7 +20,8 @@ class ProfesseurType extends AbstractType
             ->add('email')
             ->add('matiere', EntityType::class, [
                 'class' => Matiere::class,
-                'choice_label' => 'id',
+                'choice_label' => 'libelle',
+                'required' => false,
             ])
         ;
     }

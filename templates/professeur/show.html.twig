@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
-
+{% block header %}
+    <a href="{{ path('app_professeur_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+{% endblock %}
 {% block body %}
     <div class="container">
         <h2 class="mb-4 text-center">Mes informations</h2>
@@ -25,12 +27,15 @@
 
             {% if professeur.matiere %}
             <tr>
+                <th>Matière enseignée</th>
+                <td>{{ professeur.matiere.libelle }}</td>
+            </tr>
                 {% else %}
             <tr class="table-warning">
-                {% endif %}
                 <th>Matière enseignée</th>
-                <td>{{ professeur.matiere }}</td>
+                <td>A définir</td>
             </tr>
+                {% endif %}
             </tbody>
         </table>
 

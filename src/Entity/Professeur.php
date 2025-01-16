@@ -25,7 +25,7 @@ class Professeur
     #[ORM\Column(length: 60, unique: true)]
     private ?string $email = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'professeurs')]
     private ?Matiere $matiere = null;
 
     public function getId(): ?int
@@ -92,4 +92,5 @@ class Professeur
 
         return $this;
     }
+
 }

@@ -31,9 +31,16 @@ class Matiere
     #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'matieres')]
     private Collection $stages;
 
+    /**
+     * @var Collection<int, Professeur>
+     */
+    #[ORM\OneToMany(targetEntity: Professeur::class, mappedBy: 'matiere')]
+    private Collection $professeurs;
+
     public function __construct()
     {
         $this->stages = new ArrayCollection();
+        $this->professeurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +104,36 @@ class Matiere
     public function removeStage(Stage $stage): static
     {
         $this->stages->removeElement($stage);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Professeur>
+     */
+    public function getProfesseurs(): Collection
+    {
+        return $this->professeurs;
+    }
+
+    public function addProfesseur(Professeur $professeur): static
+    {
+        if (!$this->professeurs->contains($professeur)) {
+            $this->professeurs->add($professeur);
+            $professeur->setMatiere($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesseur(Professeur $professeur): static
+    {
+        if ($this->professeurs->removeElement($professeur)) {
+            // set the owning side to null (unless already changed)
+            if ($professeur->getMatiere() === $this) {
+                $professeur->setMatiere(null);
+            }
+        }
 
         return $this;
     }
