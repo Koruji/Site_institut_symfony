@@ -55,7 +55,7 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         if (in_array('ROLE_PROFESSEUR', $roles, true)) {
-            return new RedirectResponse($this->urlGenerator->generate('app_professeur_index'));
+            return new RedirectResponse($this->urlGenerator->generate('app_professeur_dashboard'));
         }
 
         if (in_array('ROLE_STAGIAIRE', $roles, true)) {

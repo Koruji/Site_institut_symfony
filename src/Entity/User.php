@@ -75,6 +75,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      *
+     * @return int
+     */
+    public function getIdUser(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @see UserInterface
+     *
      * @return list<string>
      */
     public function getRoles(): array

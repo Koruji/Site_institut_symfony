@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    <a href="{{ path('app_professeur_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+    <a href="#" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Mon compte</a>
+    <a href="#" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">S'inscrire à un stage</a>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h2 class="text-center mb-4">Bonjour {{ professeur.prenom }} ! <i class="bi bi-emoji-smile text-warning"></i></h2>
+
+    <div class="row">
+        {# Stages en cours ou à venir #}
+        <div class="col-md-6">
+            <div class="card overflow-auto" style="height: 80%;">
+                <div class="card-header text-center">
+                    Stages en cours ou à venir
+                </div>
+                <div class="list-group">
+                    {% for i in 1..8 %}
+                        <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Nom du stage</h6>
+                            </div>
+                            <p>Début du stage - Fin stage</p>
+                            <small>Nombre d'inscrits</small>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            {# Matière enseignée #}
+            <div class="card">
+                <div class="card-header text-center">
+                    Matière enseignée
+                </div>
+                <p class="text-center fw-bold m-2">Nom matière</p>
+                <a href="" class="btn btn-sm" style="background-color: #FFDAB9;">Changer de matière d'enseignement</a>
+            </div>
+
+            {# Stages passés #}
+            <div class="col-12 mt-3">
+                <div class="card">
+                    <div class="card-header text-center">
+                        Stages passés
+                    </div>
+                    <div class="list-group">
+                        {% for i in 1..3 %}
+                            <div href="" class="list-group-item flex-column align-items-start">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">Nom du stage</h6>
+                                    <small>Matière enseignée</small>
+                                </div>
+                                <p>Date de fin</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
