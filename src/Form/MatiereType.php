@@ -14,14 +14,14 @@ class MatiereType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code_matiere')
+//            ->add('code_matiere')
             ->add('libelle')
             ->add('description')
-            ->add('stages', EntityType::class, [
-                'class' => Stage::class,
-                'choice_label' => 'id',
-                'multiple' => true,
-            ])
+//            ->add('stages', EntityType::class, [
+//                'class' => Stage::class,
+//                'choice_label' => 'id',
+//                'multiple' => true,
+//            ])
         ;
     }
 
