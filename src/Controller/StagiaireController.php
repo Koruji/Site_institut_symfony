@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -24,17 +25,31 @@ final class StagiaireController extends AbstractController
     }
 
     #[Route('/stagiaire/ajout_stagiaire', name: 'app_stagiaire_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request,
+                        EntityManagerInterface $entityManager,
+                        UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $stagiaire = new Stagiaire();
+        $user = new User();
+
         $form = $this->createForm(StagiaireType::class, $stagiaire);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setNom($stagiaire->getNom());
+            $user->setPrenom($stagiaire->getPrenom());
+            $user->setEmail($stagiaire->getEmail());
+            $user->setRoles(['ROLE_STAGIAIRE']);
+
+            $mdp = $form->get('mdp')->getData();
+            $user->setPassword($userPasswordHasher->hashPassword($user, $mdp));
+            $entityManager->persist($user);
+
+            $stagiaire->setDateInscription(new \DateTime());
             $entityManager->persist($stagiaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_admin_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('stagiaire/new.html.twig', [
@@ -54,11 +69,15 @@ final class StagiaireController extends AbstractController
     #[Route('/stagiaire/{id}/modification_compte', name: 'app_stagiaire_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(StagiaireType::class, $stagiaire);
+        $user = $this->getUser();
+
+        $form = $this->createForm(StagiaireType::class, $stagiaire, [
+            'hide_mdp' => true,
+            'mdp_actuel' => $user->getPassword(),
+        ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser();
+        if ($form->isSubmitted() && $form->isValid()) {;
             $user->setEmail($stagiaire->getEmail());
             $user->setPrenom($stagiaire->getPrenom());
             $user->setNom($stagiaire->getNom());
