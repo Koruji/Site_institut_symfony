@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}
+    <a href="{{ path('app_admin_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h2 class="text-center mb-4">Bonjour {{ user.prenom }} ! <i class="bi bi-emoji-smile text-warning"></i></h2>
+
+        <div class="row g-4">
+            {# Affichage des stats prof #}
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top img-fluid" src="{{ asset('images/prof.jpg') }}" alt="Représentation profs" style="height: 200px; object-fit: cover;">
+                    <span
+                            class="badge"
+                            style="position: absolute; top: 10px; right: 10px; font-size: 3rem; padding: 10px; background-color: #ffc591;">
+                    {{ professeurs }}
+                    </span>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Nombre de professeurs inscrits</h4>
+                    </div>
+                    <a href="" class="btn" style="background-color: #FFDAB9;">Ajouter un enseignant</a>
+                </div>
+            </div>
+
+            {# Affichage des stats stagiaire #}
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top img-fluid" src="{{ asset('images/stagiaire.jpg') }}" alt="Représentation stagiaires" style="height: 200px; object-fit: cover;">
+                    <span
+                            class="badge"
+                            style="position: absolute; top: 10px; right: 10px; font-size: 3rem; padding: 10px; background-color: #ffc591;">
+                    {{ stagiaires }}
+                    </span>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Nombre de stagiaires inscrits</h4>
+                    </div>
+                    <a href="" class="btn" style="background-color: #FFDAB9;">Ajouter un stagiaire</a>
+                </div>
+            </div>
+
+            {# Affichage des stats matière #}
+            <div class="col-md-4">
+                <div class="card">
+                    <img class="card-img-top img-fluid" src="{{ asset('images/matiere.jpg') }}" alt="Représentation matières" style="height: 200px; object-fit: cover;">
+                    <span
+                            class="badge"
+                            style="position: absolute; top: 10px; right: 10px; font-size: 3rem; padding: 10px; background-color: #ffc591;">
+                    {{ matieres }}
+                    </span>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Nombre de matières proposées par la plateforme</h4>
+                    </div>
+                    <a href="" class="btn" style="background-color: #FFDAB9;">Ajouter une matière</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mt-3">
+            {# Affichage des stats stage #}
+            <div class="col-md-4 offset-md-4">
+                <div class="card">
+                    <img class="card-img-top img-fluid" src="{{ asset('images/stage.jpg') }}" alt="Représentation stages" style="height: 200px; object-fit: cover;">
+                    <span
+                            class="badge"
+                            style="position: absolute; top: 10px; right: 10px; font-size: 3rem; padding: 10px; background-color: #ffc591;">
+                    {{ stages }}
+                    </span>
+                    <div class="card-body">
+                        <h4 class="card-title text-center">Nombre de stages réalisés depuis la création de la plateforme</h4>
+                    </div>
+                    <a href="" class="btn" style="background-color: #FFDAB9;">Créer un stage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
