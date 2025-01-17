@@ -57,6 +57,12 @@ final class ProfesseurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $user->setEmail($professeur->getEmail());
+            $user->setPrenom($professeur->getPrenom());
+            $user->setNom($professeur->getNom());
+
+            $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_professeur_dashboard', [], Response::HTTP_SEE_OTHER);

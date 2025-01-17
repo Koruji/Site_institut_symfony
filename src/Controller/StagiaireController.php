@@ -58,6 +58,12 @@ final class StagiaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $this->getUser();
+            $user->setEmail($stagiaire->getEmail());
+            $user->setPrenom($stagiaire->getPrenom());
+            $user->setNom($stagiaire->getNom());
+
+            $entityManager->persist($user);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_stagiaire_dashboard', [], Response::HTTP_SEE_OTHER);
