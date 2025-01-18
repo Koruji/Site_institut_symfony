@@ -78,27 +78,33 @@ final class ProfesseurController extends AbstractController
     public function edit(Request $request, Professeur $professeur, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        $professeurUser = $entityManager->getRepository(User::class)->findByProfesseur($professeur);
 
         $form = $this->createForm(ProfesseurType::class, $professeur,  [
-            'hide_mdp' => true, // Cache le champ mdp
-            'mdp_actuel' => $user->getPassword(),
+            'hide_mdp' => true,
+            'mdp_actuel' => $professeurUser->getPassword(),
         ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setEmail($professeur->getEmail());
-            $user->setPrenom($professeur->getPrenom());
-            $user->setNom($professeur->getNom());
-            //TODO: ajouter la possibilité de modifier son mot de passe
+            $professeurUser->setNom($professeur->getNom());
+            $professeurUser->setPrenom($professeur->getPrenom());
+            $professeurUser->setEmail($professeur->getEmail());
 
             $matiere = ($entityManager->getRepository(Matiere::class))->find($professeur->getMatiere());
             $matiere->addProfesseur($professeur);
 
+            $entityManager->persist($professeurUser);
             $entityManager->persist($matiere);
-            $entityManager->persist($user);
+            $entityManager->persist($professeur);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_professeur_dashboard', [], Response::HTTP_SEE_OTHER);
+            if($user->getRoles()[0] == "ROLE_PROFESSEUR"){
+                return $this->redirectToRoute('app_professeur_dashboard', [], Response::HTTP_SEE_OTHER);
+            } else {
+                return $this->redirectToRoute('app_professeur_index', [], Response::HTTP_SEE_OTHER);
+            }
+
         }
 
         return $this->render('professeur/edit.html.twig', [
@@ -107,38 +113,38 @@ final class ProfesseurController extends AbstractController
         ]);
     }
 
-//    #[Route('/professeur/{id}', name: 'app_professeur_delete', methods: ['POST'])]
-//    public function delete(Request $request, Professeur $professeur, EntityManagerInterface $entityManager): Response
-//    {
-//        if ($this->isCsrfTokenValid('delete'.$professeur->getId(), $request->getPayload()->getString('_token'))) {
-//            $entityManager->remove($professeur);
-//            $entityManager->flush();
-//        }
-//
-//        return $this->redirectToRoute('app_professeur_index', [], Response::HTTP_SEE_OTHER);
-//    }
-
     #[Route('professeur/{id}/delete', name: 'app_professeur_delete', methods: ['POST'])]
     public function delete(Request $request, TokenStorageInterface $tokenStorage, Professeur $professeur, EntityManagerInterface $entityManager): Response
     {
-        $user = $tokenStorage->getToken()?->getUser();
+        $user = $this->getUser();
+        $professeurUser = $entityManager->getRepository(User::class)->findByProfesseur($professeur);
 
         if ($this->isCsrfTokenValid('delete'.$professeur->getId(), $request->get('_token'))) {
-            $user->setIdProfesseur(null);
-            $entityManager->persist($user);
+
+            $professeurUser->setIdProfesseur(null);
+            $entityManager->persist($professeurUser);
             $entityManager->flush();
 
-            $tokenStorage->setToken(null);
-            $request->getSession()->invalidate();
+            //si l'utilisateur connecté est le professeur, on coupe sa session avant suppression
+            if($user->getRoles()[0] == "ROLE_PROFESSEUR"){
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+            }
 
             if ($professeur) {
                 $entityManager->remove($professeur);
                 $entityManager->flush();
             }
 
-            $entityManager->remove($user);
+            $entityManager->remove($professeurUser);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+
+        if($user->getRoles()[0] == "ROLE_PROFESSEUR"){
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->redirectToRoute('app_professeur_index', [], Response::HTTP_SEE_OTHER);
+        }
+
     }
 }

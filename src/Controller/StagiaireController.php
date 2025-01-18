@@ -80,6 +80,11 @@ final class StagiaireController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $stagiaireUser->setNom($stagiaire->getNom());
+            $stagiaireUser->setPrenom($stagiaire->getPrenom());
+            $stagiaireUser->setEmail($stagiaire->getEmail());
+
+            $entityManager->persist($stagiaireUser);
             $entityManager->persist($stagiaire);
             $entityManager->flush();
 
