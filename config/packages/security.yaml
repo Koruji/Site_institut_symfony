@@ -41,7 +41,7 @@ security:
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/professeur, roles: ROLE_ADMIN }
-         - { path: ^/stagiaire, roles: ROLE_ADMIN }
+         - { path: ^/stagiaire, roles: ROLE_ADMIN}
 #         - { path: ^/stage, roles: ROLE_ADMIN }
          - { path: ^/professeur, roles: ROLE_PROFESSEUR }
          - { path: ^/stagiaire, roles: ROLE_STAGIAIRE }

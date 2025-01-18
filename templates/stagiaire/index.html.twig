@@ -31,8 +31,8 @@
                     <td>{{ stagiaire.dateInscription ? stagiaire.dateInscription|date('Y-m-d H:i:s') : '' }}</td>
                     <td>{{ stagiaire.email }}</td>
                     <td>
+                        <a href="{{ path('app_stagiaire_edit', {'id': stagiaire.id}) }}" class="btn btn-outline-dark m-2">Modifier</a>
                         {{ include('stagiaire/_delete_form.html.twig') }}
-                        <a href="{{ path('app_stagiaire_edit', {'id': stagiaire.id}) }}" class="btn btn-outline-dark">Modifier</a>
                     </td>
                 </tr>
             {% else %}
