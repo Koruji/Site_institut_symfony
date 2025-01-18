@@ -31,19 +31,29 @@ class Stage
     /**
      * @var Collection<int, Matiere>
      */
-    #[ORM\ManyToMany(targetEntity: Matiere::class, mappedBy: 'stages')]
+    #[ORM\ManyToMany(targetEntity: Matiere::class, mappedBy: 'stages', cascade: ['persist'])]
     private Collection $matieres;
 
     /**
      * @var Collection<int, Stagiaire>
      */
-    #[ORM\ManyToMany(targetEntity: Stagiaire::class, inversedBy: 'stages')]
+    #[ORM\ManyToMany(targetEntity: Stagiaire::class, inversedBy: 'stages', cascade: ['persist'])]
     private Collection $stagiaires;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $date_fin = null;
+
+    /**
+     * @var Collection<int, Professeur>
+     */
+    #[ORM\ManyToMany(targetEntity: Professeur::class, inversedBy: 'stages', cascade: ['persist'])]
+    private Collection $professeurs;
 
     public function __construct()
     {
         $this->matieres = new ArrayCollection();
         $this->stagiaires = new ArrayCollection();
+        $this->professeurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,6 +156,42 @@ class Stage
     public function removeStagiaire(Stagiaire $stagiaire): static
     {
         $this->stagiaires->removeElement($stagiaire);
+
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(\DateTimeInterface $date_fin): static
+    {
+        $this->date_fin = $date_fin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Professeur>
+     */
+    public function getProfesseurs(): Collection
+    {
+        return $this->professeurs;
+    }
+
+    public function addProfesseur(Professeur $professeur): static
+    {
+        if (!$this->professeurs->contains($professeur)) {
+            $this->professeurs->add($professeur);
+        }
+
+        return $this;
+    }
+
+    public function removeProfesseur(Professeur $professeur): static
+    {
+        $this->professeurs->removeElement($professeur);
 
         return $this;
     }

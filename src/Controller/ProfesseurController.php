@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Matiere;
 use App\Entity\Professeur;
 use App\Entity\User;
 use App\Form\ProfesseurType;
@@ -90,6 +91,10 @@ final class ProfesseurController extends AbstractController
             $user->setNom($professeur->getNom());
             //TODO: ajouter la possibilité de modifier son mot de passe
 
+            $matiere = ($entityManager->getRepository(Matiere::class))->find($professeur->getMatiere());
+            $matiere->addProfesseur($professeur);
+
+            $entityManager->persist($matiere);
             $entityManager->persist($user);
             $entityManager->flush();
 

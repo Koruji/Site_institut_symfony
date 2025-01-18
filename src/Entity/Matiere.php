@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Unique;
 
 #[ORM\Entity(repositoryClass: MatiereRepository::class)]
 class Matiere
@@ -19,7 +21,8 @@ class Matiere
     #[ORM\Column(length: 60)]
     private ?string $code_matiere = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column(length: 60, unique: true)]
+    #[NotBlank]
     private ?string $libelle = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -28,13 +31,14 @@ class Matiere
     /**
      * @var Collection<int, Stage>
      */
-    #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'matieres')]
+    #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'matieres', cascade: ['persist', 'remove'])]
+    #[ORM\JoinTable(name: "matiere_stage")]
     private Collection $stages;
 
     /**
      * @var Collection<int, Professeur>
      */
-    #[ORM\OneToMany(targetEntity: Professeur::class, mappedBy: 'matiere')]
+    #[ORM\OneToMany(targetEntity: Professeur::class, mappedBy: 'matiere', cascade: ['persist', 'remove'])]
     private Collection $professeurs;
 
     public function __construct()
@@ -103,7 +107,9 @@ class Matiere
 
     public function removeStage(Stage $stage): static
     {
-        $this->stages->removeElement($stage);
+        if($this->stages->removeElement($stage)) {
+            $stage->removeMatiere($this);
+        }
 
         return $this;
     }

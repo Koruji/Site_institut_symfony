@@ -3,10 +3,13 @@
 namespace App\Form;
 
 use App\Entity\Matiere;
+use App\Entity\Professeur;
 use App\Entity\Stage;
 use App\Entity\Stagiaire;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,21 +18,38 @@ class StageType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code_stage')
             ->add('libelle')
             ->add('description')
-            ->add('date_debut', null, [
-                'widget' => 'single_text',
+            ->add('date_debut', DateType::class, [
+                'label' => 'Date de début',
+                'widget' => 'choice',
+                'format' => 'dd/MM/yyyy',
+                'placeholder' => [
+                    'year' => 'Année',
+                    'month' => 'Mois',
+                    'day' => 'Jour',
+                ],
+                'required' => true,
+            ])
+            ->add('date_fin', DateType::class, [
+                'label' => 'Date de fin',
+                'widget' => 'choice',
+                'format' => 'dd/MM/yyyy',
+                'placeholder' => [
+                    'year' => 'Année',
+                    'month' => 'Mois',
+                    'day' => 'Jour',
+                ],
+                'required' => true,
             ])
             ->add('matieres', EntityType::class, [
                 'class' => Matiere::class,
-                'choice_label' => 'id',
+                'label' => 'Matières',
+                'choice_label' => function(Matiere $matiere) {
+                    return $matiere->getLibelle() . ' (' . $matiere->getCodeMatiere() . ')';
+                },
                 'multiple' => true,
-            ])
-            ->add('stagiaires', EntityType::class, [
-                'class' => Stagiaire::class,
-                'choice_label' => 'id',
-                'multiple' => true,
+                'expanded' => true,
             ])
         ;
     }
