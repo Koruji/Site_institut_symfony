@@ -40,9 +40,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/professeur/ajout_professeur, roles: ROLE_ADMIN }
-         - { path: ^/stagiaire/ajout_stagiaire, roles: ROLE_ADMIN }
-#         - { path: ^/matiere, roles: ROLE_ADMIN }
+         - { path: ^/professeur, roles: ROLE_ADMIN }
+         - { path: ^/stagiaire, roles: ROLE_ADMIN }
 #         - { path: ^/stage, roles: ROLE_ADMIN }
          - { path: ^/professeur, roles: ROLE_PROFESSEUR }
          - { path: ^/stagiaire, roles: ROLE_STAGIAIRE }

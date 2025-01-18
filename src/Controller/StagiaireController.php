@@ -43,6 +43,7 @@ final class StagiaireController extends AbstractController
 
             $mdp = $form->get('mdp')->getData();
             $user->setPassword($userPasswordHasher->hashPassword($user, $mdp));
+            $user->setIdStagiaire($stagiaire);
             $entityManager->persist($user);
 
             $stagiaire->setDateInscription(new \DateTime());
@@ -70,22 +71,24 @@ final class StagiaireController extends AbstractController
     public function edit(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        $stagiaireUser = $entityManager->getRepository(User::class)->findByStagiaire($stagiaire);
 
         $form = $this->createForm(StagiaireType::class, $stagiaire, [
             'hide_mdp' => true,
-            'mdp_actuel' => $user->getPassword(),
+            'mdp_actuel' => $stagiaireUser->getPassword(),
         ]);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {;
-            $user->setEmail($stagiaire->getEmail());
-            $user->setPrenom($stagiaire->getPrenom());
-            $user->setNom($stagiaire->getNom());
-
-            $entityManager->persist($user);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($stagiaire);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_stagiaire_dashboard', [], Response::HTTP_SEE_OTHER);
+            if($user->getRoles()[0] == "ROLE_STAGIAIRE"){
+                return $this->redirectToRoute('app_stagiaire_dashboard', [], Response::HTTP_SEE_OTHER);
+            } else {
+                return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+            }
+
         }
 
         return $this->render('stagiaire/edit.html.twig', [
@@ -94,38 +97,38 @@ final class StagiaireController extends AbstractController
         ]);
     }
 
-//    #[Route('/stagiaire/{id}', name: 'app_stagiaire_delete', methods: ['POST'])]
-//    public function delete(Request $request, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
-//    {
-//        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->getPayload()->getString('_token'))) {
-//            $entityManager->remove($stagiaire);
-//            $entityManager->flush();
-//        }
-//
-//        return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
-//    }
-
     #[Route('stagiaire/{id}/delete', name: 'app_stagiaire_delete', methods: ['POST'])]
     public function delete(Request $request, TokenStorageInterface $tokenStorage, Stagiaire $stagiaire, EntityManagerInterface $entityManager): Response
     {
-        $user = $tokenStorage->getToken()?->getUser();
+        $user = $this->getUser();
+        $stagiaireUser = $entityManager->getRepository(User::class)->findByStagiaire($stagiaire);
 
-        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->get('_token'))) {
-            $user->setIdStagiaire(null);
-            $entityManager->persist($user);
+        if ($this->isCsrfTokenValid('delete'.$stagiaire->getId(), $request->get('_token'))){
+
+            $stagiaireUser->setIdStagiaire(null);
+            $entityManager->persist($stagiaireUser);
             $entityManager->flush();
 
-            $tokenStorage->setToken(null);
-            $request->getSession()->invalidate();
+            //si l'utilisateur connecté est le stagiaire, on coupe sa session avant suppression
+            if($user->getRoles()[0] == "ROLE_STAGIAIRE"){
+                $tokenStorage->setToken(null);
+                $request->getSession()->invalidate();
+            }
 
             if ($stagiaire) {
                 $entityManager->remove($stagiaire);
                 $entityManager->flush();
             }
 
-            $entityManager->remove($user);
+            $entityManager->remove($stagiaireUser);
             $entityManager->flush();
         }
-        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+
+        if($user->getRoles()[0] == "ROLE_STAGIAIRE"){
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->redirectToRoute('app_stagiaire_index', [], Response::HTTP_SEE_OTHER);
+        }
+
     }
 }

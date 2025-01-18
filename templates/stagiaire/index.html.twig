@@ -1,47 +1,46 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Stagiaire index{% endblock %}
-
+{% block header %}
+    <a href="{{ path('app_admin_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+    <a href="" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des professeurs</a>
+    <a href="{{ path('app_stagiaire_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des stagiaires</a>
+    <a href="" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des cours et stages</a>
+{% endblock %}
 {% block body %}
-    <h1>Stagiaire index</h1>
-
-    <table class="table">
-        <thead>
+    <div class="container">
+        <table class="table">
+            <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
-                <th>Prenom</th>
+                <th>Prénom</th>
                 <th>Adresse</th>
                 <th>Code_postal</th>
                 <th>Ville</th>
-                <th>Date_inscription</th>
+                <th>Date d'inscription</th>
                 <th>Email</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for stagiaire in stagiaires %}
-            <tr>
-                <td>{{ stagiaire.id }}</td>
-                <td>{{ stagiaire.nom }}</td>
-                <td>{{ stagiaire.prenom }}</td>
-                <td>{{ stagiaire.adresse }}</td>
-                <td>{{ stagiaire.codePostal }}</td>
-                <td>{{ stagiaire.ville }}</td>
-                <td>{{ stagiaire.dateInscription ? stagiaire.dateInscription|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ stagiaire.email }}</td>
-                <td>
-                    <a href="{{ path('app_stagiaire_show', {'id': stagiaire.id}) }}">show</a>
-                    <a href="{{ path('app_stagiaire_edit', {'id': stagiaire.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_stagiaire_new') }}">Create new</a>
+            </thead>
+            <tbody>
+            {% for stagiaire in stagiaires %}
+                <tr>
+                    <td>{{ stagiaire.nom }}</td>
+                    <td>{{ stagiaire.prenom }}</td>
+                    <td>{{ stagiaire.adresse }}</td>
+                    <td>{{ stagiaire.codePostal }}</td>
+                    <td>{{ stagiaire.ville }}</td>
+                    <td>{{ stagiaire.dateInscription ? stagiaire.dateInscription|date('Y-m-d H:i:s') : '' }}</td>
+                    <td>{{ stagiaire.email }}</td>
+                    <td>
+                        {{ include('stagiaire/_delete_form.html.twig') }}
+                        <a href="{{ path('app_stagiaire_edit', {'id': stagiaire.id}) }}" class="btn btn-outline-dark">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">Pas de stagiaires inscrits à la plateforme</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

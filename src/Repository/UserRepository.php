@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Professeur;
+use App\Entity\Stagiaire;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -57,4 +59,20 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByStagiaire(Stagiaire $stagiaire): ?User {
+        return $this->createQueryBuilder('u')
+            ->where('u.id_stagiaire = :id')
+            ->setParameter('id', $stagiaire)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findByProfesseur(Professeur $professeur): ?User {
+        return $this->createQueryBuilder('u')
+            ->where('u.id_professeur = :id')
+            ->setParameter('id', $professeur)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
