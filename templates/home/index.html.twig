@@ -8,16 +8,15 @@
 {% block body %}
     <div class="container">
         <div class="row g-4">
-            {% for i in 1..8 %}
+            {% for stage in stages %}
                 <div class="col-md-3 mb-4">
                     <div class="card shadow-sm" style="width: 100%;">
                         <div class="card-body">
-                            <h3 class="card-title">Exemple {{ i }}</h3>
-                            <p class="card-text">Exemple description {{ i }}</p>
-                            <a href="#">Voir plus</a>
+                            <h3 class="card-title">{{ stage.libelle }}</h3>
+                            <p class="card-text">{{ stage.description }}</p>
                         </div>
                         <div class="card-footer text-muted text-center">
-                            Nombre de participants
+                            Nombre de participants : {{ stage.stagiaires|length }}
                         </div>
                     </div>
                 </div>
