@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: StagiaireRepository::class)]
 class Stagiaire
@@ -16,10 +18,12 @@ class Stagiaire
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column()]
+    #[Length(min: 2, max: 20, minMessage: "Il faut plus de 2 caractères.", maxMessage: "Pas plus de 20 caractères")]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column()]
+    #[Length(min: 2, max: 20, minMessage: "Il faut plus de 2 caractères.", maxMessage: "Pas plus de 20 caractères")]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -35,6 +39,7 @@ class Stagiaire
     private ?\DateTimeInterface $date_inscription = null;
 
     #[ORM\Column(length: 60)]
+    #[Email]
     private ?string $email = null;
 
     /**

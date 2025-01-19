@@ -6,6 +6,8 @@ use App\Repository\ProfesseurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProfesseurRepository::class)]
 class Professeur
@@ -18,13 +20,16 @@ class Professeur
     #[ORM\Column(length: 6, unique: true)]
     private ?string $matricule = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column()]
+    #[Length(min: 2, max: 20, minMessage: "Il faut plus de 2 caractères.", maxMessage: "Pas plus de 20 caractères")]
     private ?string $nom = null;
 
-    #[ORM\Column(length: 60)]
+    #[ORM\Column()]
+    #[Length(min: 2, max: 20, minMessage: "Il faut plus de 2 caractères.", maxMessage: "Pas plus de 20 caractères")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 60, unique: true)]
+    #[Email]
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'professeurs')]
