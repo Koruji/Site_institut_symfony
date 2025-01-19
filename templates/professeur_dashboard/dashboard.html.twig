@@ -17,14 +17,14 @@
                     Stages en cours ou à venir
                 </div>
                 <div class="list-group">
-                    {% for i in 1..8 %}
-                        <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
+                    {% for stage in stagePrevu %}
+                        <a href="{{ path('app_stage_show_participant', {'id': stage.id}) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                             <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Nom du stage</h6>
-                                <small>Statut du stage</small>
+                                <h6 class="mb-1">{{ stage.libelle }}</h6>
                             </div>
-                            <p>Début du stage - Fin stage</p>
-                            <small>Nombre d'inscrits</small>
+                            <p>Date de début : {{ stage.dateDebut ? stage.dateDebut|date('d-m-Y') : '' }}</p>
+                            <p>Date de fin : {{ stage.dateFin ? stage.dateFin|date('d-m-Y') : '' }}</p>
+                            <small>Nombre d'inscrits </small>
                         </a>
                     {% endfor %}
                 </div>
@@ -54,13 +54,12 @@
                         Stages passés
                     </div>
                     <div class="list-group">
-                        {% for i in 1..3 %}
-                            <a href="" class="list-group-item list-group-item-action flex-column align-items-start">
+                        {% for stage in stagePasse %}
+                            <a href="{{ path('app_stage_show_participant', {'id': stage.id}) }}" class="list-group-item list-group-item-action flex-column align-items-start">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h6 class="mb-1">Nom du stage</h6>
-                                    <small>Matière enseignée</small>
+                                    <h6 class="mb-1">{{ stage.libelle }}</h6>
                                 </div>
-                                <p>Date de fin</p>
+                                <p>Date de fin : {{ stage.dateFin ? stage.dateFin|date('d-m-Y') : '' }}</p>
                             </a>
                         {% endfor %}
                     </div>

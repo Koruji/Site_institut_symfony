@@ -115,6 +115,37 @@ final class StageController extends AbstractController
         ]);
     }
 
+    #[Route('/stage/{id}/participant', name: 'app_stage_show_participant', methods: ['GET'])]
+    public function showParticipant(Stage $stage): Response
+    {
+        $matieres = $stage->getMatieres();
+        $professeurs = $stage->getProfesseurs();
+        $stagiaires = $stage->getStagiaires();
+
+        $libelleMatiere = [];
+        $libelleProfesseur = [];
+        $libelleStagiaire = [];
+
+        foreach ($matieres as $matiere) {
+            $libelleMatiere[] = $matiere->getLibelle();
+        }
+
+        foreach ($professeurs as $professeur) {
+            $libelleProfesseur[] = $professeur->getNom() . " " . $professeur->getPrenom();
+        }
+
+        foreach ($stagiaires as $stagiaire) {
+            $libelleStagiaire[] = $stagiaire->getNom() . " " . $stagiaire->getPrenom();
+        }
+
+        return $this->render('stage/show_participant.html.twig', [
+            'stage' => $stage,
+            'matieres' => $libelleMatiere,
+            'professeurs' => $libelleProfesseur,
+            'stagiaires' => $libelleStagiaire,
+        ]);
+    }
+
     #[Route('/stage/{id}/modification_stage', name: 'app_stage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Stage $stage, EntityManagerInterface $entityManager): Response
     {

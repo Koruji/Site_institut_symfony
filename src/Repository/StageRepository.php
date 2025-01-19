@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Professeur;
 use App\Entity\Stage;
+use App\Entity\Stagiaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,35 @@ class StageRepository extends ServiceEntityRepository
         parent::__construct($registry, Stage::class);
     }
 
-    //    /**
-    //     * @return Stage[] Returns an array of Stage objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Retourne tous les stages associés à un stagiaire donné.
+     *
+     * @param Stagiaire $stagiaire
+     * @return Stage[]|null
+     */
+    public function findStageByStagiaire(Stagiaire $stagiaire): array
+    {
+        return $this->createQueryBuilder('st')
+            ->join('st.stagiaires', 's') // Jointure avec la table des stages
+            ->where('s = :stagiaire')   // Filtrer par le stage donné
+            ->setParameter('stagiaire', $stagiaire)
+            ->getQuery()
+            ->getResult();
+    }
 
-    //    public function findOneBySomeField($value): ?Stage
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Retourne tous les stages associés à un professeur donné.
+     *
+     * @param Professeur $professeur
+     * @return Stage[]|null
+     */
+    public function findStageByProfesseur(Professeur $professeur): array
+    {
+        return $this->createQueryBuilder('st')
+            ->join('st.professeurs', 's')
+            ->where('s = :professeur')
+            ->setParameter('professeur', $professeur)
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+    <a href="{{ app.request.headers.get('referer') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Code stage</th>
+                <td>{{ stage.codeStage }}</td>
+            </tr>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ stage.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Description du stage</th>
+                <td>{{ stage.description }}</td>
+            </tr>
+            <tr>
+                <th>Date de début</th>
+                <td>{{ stage.dateDebut ? stage.dateDebut|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date de fin</th>
+                <td>{{ stage.dateFin ? stage.dateFin|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Matières</th>
+                <td>
+                    {{ matieres|join(", ") }}
+                </td>
+            </tr>
+            <tr>
+                <th>Professeurs</th>
+                <td>
+                    {{ professeurs|join(", ") }}
+                </td>
+            </tr>
+            <tr>
+                <th>Stagiaires</th>
+                <td>
+                    {{ stagiaires|join(", ") }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}
