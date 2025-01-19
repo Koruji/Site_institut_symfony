@@ -114,7 +114,6 @@ final class StagiaireController extends AbstractController
             $entityManager->persist($stagiaireUser);
             $entityManager->flush();
 
-            //si l'utilisateur connecté est le stagiaire, on coupe sa session avant suppression
             if($user->getRoles()[0] == "ROLE_STAGIAIRE"){
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();

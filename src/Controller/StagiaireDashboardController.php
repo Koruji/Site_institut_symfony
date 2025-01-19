@@ -15,7 +15,6 @@ final class StagiaireDashboardController extends AbstractController
     #[IsGranted('ROLE_STAGIAIRE')]
     public function dashboard(EntityManagerInterface $entityManager): Response
     {
-        //Récupération de l'utilisateur
         $user = $this->getUser();
         $stagiaire = $user->getIdStagiaire();
 
@@ -23,7 +22,6 @@ final class StagiaireDashboardController extends AbstractController
             throw $this->createNotFoundException('User introuvable.');
         }
 
-        //Récupération des stages
         $stagePasse = [];
         $stagePrevu = [];
 

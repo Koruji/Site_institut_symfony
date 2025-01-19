@@ -7,8 +7,6 @@ use App\Entity\Stage;
 use App\Entity\Stagiaire;
 use App\Form\ParticipantType;
 use App\Form\StageType;
-use App\Repository\MatiereRepository;
-use App\Repository\ProfesseurRepository;
 use App\Repository\StageRepository;
 use App\Repository\StagiaireRepository;
 use App\Service\GenerateCode;
@@ -21,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 final class StageController extends AbstractController
 {
     #[Route('/stage', name: 'app_stage_index', methods: ['GET'])]
-    public function index(StageRepository $stageRepository, MatiereRepository $matiereRepository, ProfesseurRepository $professeurRepository, StagiaireRepository $stagiaireRepository): Response
+    public function index(StageRepository $stageRepository, StagiaireRepository $stagiaireRepository): Response
     {
         $professeurs = [];
         $matieres = [];
@@ -30,14 +28,14 @@ final class StageController extends AbstractController
         foreach ($stageRepository->findAll() as $stage) {
             $professeurs[$stage->getId()] = [];
             foreach ($stage->getProfesseurs() as $professeur) {
-                $professeurs[$stage->getId()][] = $professeur->getNom() . " " . $professeur->getPrenom(); // On récupère les libellés
+                $professeurs[$stage->getId()][] = $professeur->getNom() . " " . $professeur->getPrenom();
             }
         }
 
         foreach ($stageRepository->findAll() as $stage) {
             $matieres[$stage->getId()] = [];
             foreach ($stage->getMatieres() as $matiere) {
-                $matieres[$stage->getId()][] = $matiere->getLibelle(); // On récupère les libellés
+                $matieres[$stage->getId()][] = $matiere->getLibelle();
             }
         }
 
@@ -76,7 +74,6 @@ final class StageController extends AbstractController
             return $this->redirectToRoute('app_admin_dashboard', [], Response::HTTP_SEE_OTHER);
         }
 
-        // Rendu du formulaire pour l'ajout d'un stage
         return $this->render('stage/new.html.twig', [
             'stage' => $stage,
             'form' => $form,

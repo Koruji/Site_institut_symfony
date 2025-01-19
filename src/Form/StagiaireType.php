@@ -34,7 +34,6 @@ class StagiaireType extends AbstractType
                 'label' => 'Mot de passe',
                 'mapped' => false,
                 'required' => true,
-                //TODO : implémenter le fait que le mdp soit obligatoire
             ]);
         }
     }

@@ -27,14 +27,11 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            //Initialisation des valeurs USER
             $userChoice = $form->get('role')->getData();
             $user->setRoles([$userChoice]);
 
-            //Génération de matricule par défaut
             $matricule = new GenerateMatricule($entityManager);
 
-            //Initialisation des utilisateurs en fonction du rôle
             switch($userChoice) {
                 case 'ROLE_PROFESSEUR':
                     $professeur = new Professeur();
@@ -65,7 +62,6 @@ class RegistrationController extends AbstractController
             /** @var string $plainPassword */
             $plainPassword = $form->get('plainPassword')->getData();
 
-            // encode the plain password
             $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
 
             $entityManager->persist($user);

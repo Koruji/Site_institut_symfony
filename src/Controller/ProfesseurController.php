@@ -125,7 +125,6 @@ final class ProfesseurController extends AbstractController
             $entityManager->persist($professeurUser);
             $entityManager->flush();
 
-            //si l'utilisateur connecté est le professeur, on coupe sa session avant suppression
             if($user->getRoles()[0] == "ROLE_PROFESSEUR"){
                 $tokenStorage->setToken(null);
                 $request->getSession()->invalidate();
