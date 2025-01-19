@@ -32,7 +32,7 @@ class Matiere
      * @var Collection<int, Stage>
      */
     #[ORM\ManyToMany(targetEntity: Stage::class, inversedBy: 'matieres', cascade: ['persist', 'remove'])]
-    #[ORM\JoinTable(name: "matiere_stage")]
+    #[ORM\JoinTable(name: 'matiere_stage')]
     private Collection $stages;
 
     /**
@@ -96,7 +96,7 @@ class Matiere
         return $this->stages;
     }
 
-    public function addStage(Stage $stage): static
+    public function addStage(Stage $stage): self
     {
         if (!$this->stages->contains($stage)) {
             $this->stages->add($stage);
@@ -105,12 +105,9 @@ class Matiere
         return $this;
     }
 
-    public function removeStage(Stage $stage): static
+    public function removeStage(Stage $stage): self
     {
-        if($this->stages->removeElement($stage)) {
-            $stage->removeMatiere($this);
-        }
-
+        $this->stages->removeElement($stage);
         return $this;
     }
 

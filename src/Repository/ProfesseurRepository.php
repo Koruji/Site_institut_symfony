@@ -4,9 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Matiere;
 use App\Entity\Professeur;
+use App\Entity\Stage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Collection;
 
 /**
  * @extends ServiceEntityRepository<Professeur>
@@ -51,12 +52,28 @@ class ProfesseurRepository extends ServiceEntityRepository
      */
     public function findProfesseursByMatieres(Collection $matieres): array
     {
-        $matiere = array($matieres);
         $qb = $this->createQueryBuilder('p')
-            ->innerJoin('p.matiere', 'm')
-            ->where('m IN (:matieres)')
-            ->setParameter('matieres', $matiere);
+            ->innerJoin('p.matiere', 'm')  // Jointure avec la table Matiere
+            ->where('m IN (:matieres)')  // Sélectionne les professeurs liés aux matières
+            ->setParameter('matieres', $matieres);  // Passe la collection directement
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()->getResult();  // Retourne le résultat
+    }
+
+
+    /**
+     * Trouve tous les professeurs associés à un stage donné.
+     *
+     * @param Stage $stage
+     * @return Professeur[]
+     */
+    public function findProfesseurByStage(Stage $stage): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.stages', 's')
+            ->where('s = :stage')
+            ->setParameter('stage', $stage)
+            ->getQuery()
+            ->getResult();
     }
 }

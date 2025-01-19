@@ -117,7 +117,7 @@ class Stage
         return $this->matieres;
     }
 
-    public function addMatiere(Matiere $matiere): static
+    public function addMatiere(Matiere $matiere): self
     {
         if (!$this->matieres->contains($matiere)) {
             $this->matieres->add($matiere);
@@ -127,7 +127,7 @@ class Stage
         return $this;
     }
 
-    public function removeMatiere(Matiere $matiere): static
+    public function removeMatiere(Matiere $matiere): self
     {
         if ($this->matieres->removeElement($matiere)) {
             $matiere->removeStage($this);

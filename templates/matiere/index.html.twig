@@ -1,39 +1,41 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Matiere index{% endblock %}
-
+{% block header %}
+    <a href="{{ path('app_admin_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+    <a href="{{ path('app_professeur_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des professeurs</a>
+    <a href="{{ path('app_stagiaire_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des stagiaires</a>
+    <a href="{{ path('app_matiere_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des matières</a>
+    <a href="{{ path('app_stage_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Gestion des stages</a>
+{% endblock %}
 {% block body %}
-    <h1>Matiere index</h1>
-
-    <table class="table">
-        <thead>
+    <div class="container">
+        <table class="table">
+            <thead>
             <tr>
-                <th>Id</th>
-                <th>Code_matiere</th>
-                <th>Libelle</th>
+                <th>Code matière</th>
+                <th>Libellé</th>
                 <th>Description</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for matiere in matieres %}
-            <tr>
-                <td>{{ matiere.id }}</td>
-                <td>{{ matiere.codeMatiere }}</td>
-                <td>{{ matiere.libelle }}</td>
-                <td>{{ matiere.description }}</td>
-                <td>
-                    <a href="{{ path('app_matiere_show', {'id': matiere.id}) }}">show</a>
-                    <a href="{{ path('app_matiere_edit', {'id': matiere.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for matiere in matieres %}
+                <tr>
+                    <td>{{ matiere.codeMatiere }}</td>
+                    <td>{{ matiere.libelle }}</td>
+                    <td>{{ matiere.description }}</td>
+                    <td>
+                        <a href="{{ path('app_matiere_edit', {'id': matiere.id}) }}" class="btn btn-outline-dark m-2">Modifier</a>
+                        {{ include('matiere/_delete_form.html.twig') }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">Pas de stage de proposés sur la plateforme</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
-    <a href="{{ path('app_matiere_new') }}">Create new</a>
+
 {% endblock %}

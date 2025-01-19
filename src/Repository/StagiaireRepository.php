@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Stage;
 use App\Entity\Stagiaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -40,4 +41,20 @@ class StagiaireRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Retourne tous les stagiaires associés à un stage donné.
+     *
+     * @param Stage $stage
+     * @return Stagiaire[]|null
+     */
+    public function findStagiaireByStage(Stage $stage): ?array
+    {
+        return $this->createQueryBuilder('st')
+            ->join('st.stages', 's') // Jointure avec la table des stages
+            ->where('s = :stage')   // Filtrer par le stage donné
+            ->setParameter('stage', $stage)
+            ->getQuery()
+            ->getResult();
+    }
 }

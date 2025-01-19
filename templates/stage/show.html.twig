@@ -1,38 +1,60 @@
 {% extends 'base.html.twig' %}
-
-{% block title %}Stage{% endblock %}
-
+{% block header %}
+    <a href="{{ path('app_admin_dashboard') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Menu</a>
+    <a href="{{ path('app_stage_index') }}" class="nav-item btn" style="background-color: #FFDAB9;margin-right: 10px;">Retour à la liste</a>
+{% endblock %}
 {% block body %}
-    <h1>Stage</h1>
-
-    <table class="table">
-        <tbody>
+    <div class="container">
+        <table class="table">
+            <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ stage.id }}</td>
-            </tr>
-            <tr>
-                <th>Code_stage</th>
+                <th>Code stage</th>
                 <td>{{ stage.codeStage }}</td>
             </tr>
             <tr>
-                <th>Libelle</th>
+                <th>Libellé</th>
                 <td>{{ stage.libelle }}</td>
             </tr>
             <tr>
-                <th>Description</th>
+                <th>Description du stage</th>
                 <td>{{ stage.description }}</td>
             </tr>
             <tr>
-                <th>Date_debut</th>
-                <td>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date de début</th>
+                <td>{{ stage.dateDebut ? stage.dateDebut|date('d-m-Y') : '' }}</td>
             </tr>
-        </tbody>
-    </table>
+            <tr>
+                <th>Date de fin</th>
+                <td>{{ stage.dateFin ? stage.dateFin|date('d-m-Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Matières</th>
+                <td>
+                    {{ matieres|join(", ") }}
+                </td>
+            </tr>
+            <tr>
+                <th>Professeurs</th>
+                <td>
+                    {{ professeurs|join(", ") }}
+                </td>
+            </tr>
+            <tr>
+                <th>Stagiaires</th>
+                <td>
+                    {{ stagiaires|join(", ") }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_stage_index') }}">back to list</a>
+        <div class="">
+            <a href="{{ path('app_stage_edit', {'id': stage.id}) }}" class="btn btn-outline-dark mb-2">Modifier</a>
+            <a href="{{ path('app_stage_participant', {'id': stage.id}) }}" class="btn btn-outline-dark mb-2">Ajouter des participants</a>
+            {{ include('stage/_delete_form.html.twig') }}
+        </div>
 
-    <a href="{{ path('app_stage_edit', {'id': stage.id}) }}">edit</a>
+    </div>
 
-    {{ include('stage/_delete_form.html.twig') }}
+
 {% endblock %}

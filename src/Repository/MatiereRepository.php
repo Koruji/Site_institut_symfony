@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Matiere;
+use App\Entity\Stage;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -40,4 +41,22 @@ class MatiereRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    /**
+     * Retourne toutes les matières associées à un stage donné.
+     *
+     * @param Stage $stage
+     * @return Matiere[]|null
+     */
+    public function findMatiereByStage(Stage $stage): ?array
+    {
+        return $this->createQueryBuilder('m')
+            ->join('m.stages', 's') // Jointure avec la table des stages
+            ->where('s = :stage')  // Filtrer par le stage donné
+            ->setParameter('stage', $stage)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }

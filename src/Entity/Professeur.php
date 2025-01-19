@@ -114,7 +114,7 @@ class Professeur
         return $this->stages;
     }
 
-    public function addStage(Stage $stage): static
+    public function addStage(Stage $stage): self
     {
         if (!$this->stages->contains($stage)) {
             $this->stages->add($stage);
@@ -124,7 +124,7 @@ class Professeur
         return $this;
     }
 
-    public function removeStage(Stage $stage): static
+    public function removeStage(Stage $stage): self
     {
         if ($this->stages->removeElement($stage)) {
             $stage->removeProfesseur($this);
