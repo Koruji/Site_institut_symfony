@@ -11,4 +11,4 @@ N'hésitez pas à me faire un retour 🙏
 <br>
 (*Le site n'a pas pu être finalisé correctement, il manque des fonctionnalitées, je les corrigerai plus tard*). 
 <br>
-> NOTATION ENSEIGNANT : **18/20** pour PHP et **17/20** pour JS
+> NOTATION ENSEIGNANT : **16/20** pour la mise en place de la BDD, **15/20** pour Symphony 7
